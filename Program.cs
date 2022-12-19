@@ -1,7 +1,12 @@
+using MovieTickets.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// DbContext Configuration
+//builder.Services.AddDbContextPool<AppDbContext>();
 
 var app = builder.Build();
 
