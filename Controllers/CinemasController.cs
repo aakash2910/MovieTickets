@@ -4,18 +4,18 @@ using MovieTickets.Data;
 
 namespace MovieTickets.Controllers
 {
-    public class ActorsController : Controller
+    public class CinemasController : Controller
     {
         private readonly AppDbContext _dbContext;
 
-        public ActorsController(AppDbContext context)
+        public CinemasController(AppDbContext context)
         {
             _dbContext = context;
         }
         public async Task<IActionResult> Index()
         {
-            var allActors = await _dbContext.Actors.ToListAsync();
-            return View(allActors);
+            var allCinemas = await _dbContext.Cinemas.ToListAsync();
+            return View();
         }
     }
 }
