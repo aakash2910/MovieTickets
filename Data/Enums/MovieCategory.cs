@@ -7,6 +7,8 @@
         Drama,
         SciFi,
         Documentary,
-        Mystry
+        Mystry,
+        Horror,
+        Cartoon
     }
 }
