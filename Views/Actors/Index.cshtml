@@ -1,0 +1,7 @@
+﻿@model IEnumerable<MovieTickets.Models.Actor>;
+
+@foreach(var actor in Model)
+{
+    <h3>@actor.FullName</h3>
+    <h4>@actor.Bio</h4>
+}
