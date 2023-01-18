@@ -15,7 +15,7 @@ namespace MovieTickets.Data.Services
             var allActors = await _dbContext.Actors.OrderByDescending(actor => actor.Id).ToListAsync();
             return allActors;
         }
-        public void AddActor(Actor actor)
+        public void AddActorAsync(Actor actor)
         {   
             _dbContext.Actors.Add(actor);
             _dbContext.SaveChangesAsync();
@@ -34,9 +34,11 @@ namespace MovieTickets.Data.Services
             return actor;
         }
 
-        public void DeleteActor(int id)
+        public async Task DeleteActorAsync(int id)
         {
-            
+            var actor = await _dbContext.Actors.FindAsync(id);
+            _dbContext.Actors.Remove(actor);
+            await _dbContext.SaveChangesAsync();
         }    
     }
 }

@@ -37,7 +37,7 @@ namespace MovieTickets.Controllers
             }
 
             ViewBag.SuccessNotification = true;
-            _actorsService.AddActor(actor);
+            await _actorsService.AddActorAsync(actor);
             return RedirectToAction(nameof(Index), new { isSuccess = true }) ;
         }
 
@@ -72,6 +72,26 @@ namespace MovieTickets.Controllers
                 return View(actor);
             }
             await _actorsService.EditActorAsync(id, actor);
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Get: actors/delete/1
+        public async Task<IActionResult> Delete(int id)
+        {
+            var actor = await _actorsService.GetActorByIdAsync(id);
+            if (actor == null)
+                return View("NotFound");
+            return View(actor);
+        }
+
+        // Post: actors/delete/1
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var actor = await _actorsService.GetActorByIdAsync(id);
+            if (actor == null)
+                return View("NotFound");
+            await _actorsService.DeleteActorAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }
