@@ -16,7 +16,7 @@ namespace MovieTickets.Controllers
         public async Task<IActionResult> Index(bool isSuccess = false)
         {
             ViewBag.SuccessNotification = isSuccess;
-            var allActors = await _actorsService.GetAllActorsAsync();
+            var allActors = await _actorsService.GetAllAsync();
             return View(allActors);
         }
 
@@ -28,6 +28,7 @@ namespace MovieTickets.Controllers
 
         
         [HttpPost]                 // Bind specific properties to model which we will receive from create view
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FullName, Bio, ProfilePictureURL")]Actor actor)
         {
             // check all model validations if satisfied then state is valid
@@ -37,14 +38,14 @@ namespace MovieTickets.Controllers
             }
 
             ViewBag.SuccessNotification = true;
-            await _actorsService.AddActorAsync(actor);
+            await _actorsService.AddAsync(actor);
             return RedirectToAction(nameof(Index), new { isSuccess = true }) ;
         }
 
         // Get: Actors/Details/1
         public async Task<IActionResult> Details(int id)
         {
-            var actor = await _actorsService.GetActorByIdAsync(id);
+            var actor = await _actorsService.GetByIdAsync(id);
             if(actor == null)
             {
                 return View("NotFound");
@@ -55,7 +56,7 @@ namespace MovieTickets.Controllers
         // Get: Actors/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
-            var actor = await _actorsService.GetActorByIdAsync(id);
+            var actor = await _actorsService.GetByIdAsync(id);
             if (actor == null)
             {
                 return View("NotFound");
@@ -65,20 +66,21 @@ namespace MovieTickets.Controllers
 
         // Post: Actors/Edit/1
         [HttpPost]                          // No need to bind properties as we are receiving all properties of Actor model
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Actor actor)
         {
             if(!ModelState.IsValid)
             {
                 return View(actor);
             }
-            await _actorsService.EditActorAsync(id, actor);
+            await _actorsService.EditAsync(id, actor);
             return RedirectToAction(nameof(Index));
         }
 
         // Get: actors/delete/1
         public async Task<IActionResult> Delete(int id)
         {
-            var actor = await _actorsService.GetActorByIdAsync(id);
+            var actor = await _actorsService.GetByIdAsync(id);
             if (actor == null)
                 return View("NotFound");
             return View(actor);
@@ -86,12 +88,13 @@ namespace MovieTickets.Controllers
 
         // Post: actors/delete/1
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var actor = await _actorsService.GetActorByIdAsync(id);
+        {   
+            var actor = await _actorsService.GetByIdAsync(id);
             if (actor == null)
                 return View("NotFound");
-            await _actorsService.DeleteActorAsync(id);
+            await _actorsService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

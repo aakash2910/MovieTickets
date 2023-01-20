@@ -34,7 +34,7 @@
 
                     <div class="form-group">
                         <input style="margin-top: 10px" type="submit" value="Edit" class="btn btn-outline-success float-right" />
-                        <a style="margin-top: 10px" class="btn btn-outline-secondary" asp-action="Index">Show all</a>
+                        <a style="margin-top: 10px" class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                     </div>
                 </form>
             </div>
@@ -53,6 +53,6 @@
         $("#ProfilePictureURL").on("change", function () {
             var output = document.getElementById('ProfilePicturePreview');
             output.src = $(this).val();
-        })
+        });
     </script>
 }

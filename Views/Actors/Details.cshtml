@@ -15,26 +15,22 @@
                     <img class="border-info" id="ProfilePicturePreview" style="max-width:150px" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="ProfilePictureURL" class="control-label"></label>
-                    <input asp-for="ProfilePictureURL" class="form-control" />
-                    <span asp-validation-for="ProfilePictureURL" class="text-danger"></span>
+                    <label asp-for="ProfilePictureURL" class="control-label"></label>                    
+                    <input asp-for="ProfilePictureURL" disabled class="form-control" />
                 </div>
                 <div class="form-group">
                     <label asp-for="FullName" class="control-label"></label>
-                    <input asp-for="FullName" class="form-control" />
-                    <span asp-validation-for="FullName" class="text-danger"></span>
+                    <input asp-for="FullName" disabled class="form-control" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Bio" class="control-label"></label>
-                    <input asp-for="Bio" class="form-control" />
-                    <span asp-validation-for="Bio" class="text-danger"></span>
+                    <input asp-for="Bio" disabled class="form-control" />
                 </div>
-
                 <div class="form-group">                    
                     <a style="margin-top: 10px" class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.Id">
                         <i class="bi bi-pencil-square"></i>Edit
                     </a>
-                    <a style="margin-top: 10px" class="btn btn-outline-secondary" asp-action="Index">Show Actors</a>
+                    <a style="margin-top: 10px" class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>              
             </div>
         </div>
