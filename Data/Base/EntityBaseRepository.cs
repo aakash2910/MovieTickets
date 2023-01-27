@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq.Expressions;
 
 namespace MovieTickets.Data.Base
 {
@@ -47,6 +48,13 @@ namespace MovieTickets.Data.Base
             /*var entity = await _dbContext.Set<T>().FirstOrDefaultAsync(entity => entity.Id == id);
             EntityEntry entityEntry = _dbContext.Entry<T>(entity);
             entityEntry.State = EntityState.Deleted;*/
-        }      
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = _dbContext.Set<T>();
+            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+            return await query.ToListAsync();
+        }
     }
 }

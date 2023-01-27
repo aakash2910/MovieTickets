@@ -13,10 +13,11 @@ namespace MovieTickets.Controllers
         {
             _actorsService = actorsService;
         }   
-        public async Task<IActionResult> Index(bool isSuccess = false)
+        public async Task<IActionResult> Index(bool isSuccess = false, string actionOnModel = "")
         {
             ViewBag.SuccessNotification = isSuccess;
-            var allActors = await _actorsService.GetAllAsync();
+            ViewBag.ActionOnModel = actionOnModel;
+            var allActors = await _actorsService.GetAllAsync();            
             return View(allActors);
         }
 
@@ -36,10 +37,9 @@ namespace MovieTickets.Controllers
             {
                 return View(actor);
             }
-
-            ViewBag.SuccessNotification = true;
+            
             await _actorsService.AddAsync(actor);
-            return RedirectToAction(nameof(Index), new { isSuccess = true }) ;
+            return RedirectToAction(nameof(Index), new { isSuccess = true, actionOnModel = "Created" }) ;
         }
 
         // Get: Actors/Details/1
@@ -73,8 +73,9 @@ namespace MovieTickets.Controllers
             {
                 return View(actor);
             }
+            
             await _actorsService.EditAsync(id, actor);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { isSuccess = true, actionOnModel = "Updated" });
         }
 
         // Get: actors/delete/1
@@ -94,8 +95,9 @@ namespace MovieTickets.Controllers
             var actor = await _actorsService.GetByIdAsync(id);
             if (actor == null)
                 return View("NotFound");
+
             await _actorsService.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { isSuccess = true, actionOnModel = "Deleted" });
         }
     }
 }

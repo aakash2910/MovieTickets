@@ -5,13 +5,22 @@
 
 <div class="row">
     <div class="col-md-8 offset-md-2">
+        @if (ViewBag.SuccessNotification)
+        {
+            <div id="producerCreatedSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Congratulations.</strong> Producer has been @ViewBag.actionOnModel successfully.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
         <table class="table">
             <thead>
                 <tr class="text-center">
                     <th>@Html.DisplayNameFor(model => model.ProfilePictureURL)</th>
                     <th>@Html.DisplayNameFor(model => model.FullName)</th>
                     <th>@Html.DisplayNameFor(model => model.Bio)</th>
-                    <th>Actions</th>
+                    <th>Actions</th>                    
                 </tr>
             </thead>
             <tbody>
@@ -28,9 +37,9 @@
                             @Html.DisplayFor(modelItem => producer.Bio)
                         </td>
                         <td class="align-middle">
-                            <a class="btn btn-outline-primary"><i class="bi bi-pencil-square"></i>Edit </a> |
-                            <a class="btn btn-outline-info"><i class="bi bi-eye"></i>Details </a> |
-                            <a class="btn btn-danger text-white"><i class="bi bi-trash"></i>Delete </a>
+                            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@producer.Id"><i class="bi bi-pencil-square"></i>Edit </a> |
+                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@producer.Id"><i class="bi bi-eye"></i>Details </a> |
+                            <a class="btn btn-danger text-white" asp-action="Delete" asp-route-id="@producer.Id"><i class="bi bi-trash"></i>Delete </a>
                         </td>
                     </tr>
                 }
@@ -40,3 +49,21 @@
 
     </div>
 </div>
+
+<div style="position: fixed; right: 25px; bottom: 25px;" class="text-white">
+    <a asp-controller="Producers" asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Add New
+    </a>
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            var output = document.getElementById('producerCreatedSuccessAlert');
+            if (output)
+                $("#producerCreatedSuccessAlert").delay(3000).fadeOut(500);
+        });
+
+    </script>
+}
