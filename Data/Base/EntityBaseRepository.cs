@@ -19,6 +19,13 @@ namespace MovieTickets.Data.Base
             return result;
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = _dbContext.Set<T>();
+            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+            return await query.ToListAsync();
+        }
+
         public async Task<T> GetByIdAsync(int id)
         {
             var result = await _dbContext.Set<T>().FirstOrDefaultAsync(entity => entity.Id == id);
@@ -48,13 +55,6 @@ namespace MovieTickets.Data.Base
             /*var entity = await _dbContext.Set<T>().FirstOrDefaultAsync(entity => entity.Id == id);
             EntityEntry entityEntry = _dbContext.Entry<T>(entity);
             entityEntry.State = EntityState.Deleted;*/
-        }
-
-        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
-        {
-            IQueryable<T> query = _dbContext.Set<T>();
-            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-            return await query.ToListAsync();
-        }
+        }        
     }
 }
