@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieTickets.Data;
 using MovieTickets.Data.Services;
+using MovieTickets.Data.Static;
 using MovieTickets.Models;
 
 namespace MovieTickets.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class CinemasController : Controller
     {
         private readonly ICinemasService _service;
@@ -14,6 +17,8 @@ namespace MovieTickets.Controllers
         {
             _service = service;
         }
+
+        [AllowAnonymous]
         public async Task<IActionResult> Index(bool isSuccess = false, string actionOnModel = "")
         {
             ViewBag.SuccessNotification = isSuccess;
@@ -24,6 +29,7 @@ namespace MovieTickets.Controllers
 
         // GET: cinemas/details/1
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Cinema>>> Details(int id)
         {
             var cinema = await _service.GetByIdAsync(id);

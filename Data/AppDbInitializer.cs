@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MovieTickets.Data.Enums;
+using MovieTickets.Data.Static;
 using MovieTickets.Models;
 
 namespace MovieTickets.Data
@@ -581,6 +583,52 @@ namespace MovieTickets.Data
                         MovieId = 6
                     }
                 );*/
+        }
+
+        public static async Task SeedUsersAndRoles(IApplicationBuilder applicationBuilder)
+        {
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            {
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+
+                if (!await roleManager.RoleExistsAsync(UserRoles.User))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+
+                // Users
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+                var adminUser = await userManager.FindByEmailAsync("admin@movietickets.com");
+                var adminPassword = "Admin@123";
+                if(adminUser == null)
+                {
+                    var newAdminUser = new AppUser()
+                    {
+                        FullName = "Admin user",
+                        UserName = "Admin",
+                        Email = "admin@movietickets.com",
+                        EmailConfirmed = true,
+                    };
+                    await userManager.CreateAsync(newAdminUser, adminPassword);
+                    await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
+                }
+
+                var appUser = await userManager.FindByEmailAsync("user@movietickets.com");
+                var appUserPassword = "User@123";
+                if (appUser == null)
+                {
+                    var newAppUser = new AppUser()
+                    {
+                        FullName = "Application user",
+                        UserName = "User",
+                        Email = "user@movietickets.com",
+                        EmailConfirmed = true,
+                    };
+                    await userManager.CreateAsync(newAppUser, appUserPassword);
+                    await userManager.AddToRoleAsync(newAppUser, UserRoles.Admin);
+                }
+            }
         }
     }
 }

@@ -15,7 +15,7 @@
                     <img class="border-info" id="ProfilePicturePreview" style="max-width:150px" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="ProfilePictureURL" class="control-label"></label>                    
+                    <label asp-for="ProfilePictureURL" class="control-label"></label>
                     <input asp-for="ProfilePictureURL" disabled class="form-control" />
                 </div>
                 <div class="form-group">
@@ -26,12 +26,16 @@
                     <label asp-for="Bio" class="control-label"></label>
                     <input asp-for="Bio" disabled class="form-control" />
                 </div>
-                <div class="form-group">                    
-                    <a style="margin-top: 10px" class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.Id">
-                        <i class="bi bi-pencil-square"></i>Edit
-                    </a>
+                <div class="form-group">
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                        <a style="margin-top: 10px" class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.Id">
+                            <i class="bi bi-pencil-square"></i>Edit
+                        </a>
+                    }
+
                     <a style="margin-top: 10px" class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
-                </div>              
+                </div>
             </div>
         </div>
     </div>

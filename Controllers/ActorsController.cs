@@ -1,18 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieTickets.Data;
 using MovieTickets.Data.Services;
+using MovieTickets.Data.Static;
 using MovieTickets.Models;
 
 namespace MovieTickets.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class ActorsController : Controller
     {
         private readonly IActorsService _actorsService; 
         public ActorsController(IActorsService actorsService) 
         {
             _actorsService = actorsService;
-        }   
+        }
+
+        [AllowAnonymous]
         public async Task<IActionResult> Index(bool isSuccess = false, string actionOnModel = "")
         {
             ViewBag.SuccessNotification = isSuccess;
@@ -42,7 +47,9 @@ namespace MovieTickets.Controllers
             return RedirectToAction(nameof(Index), new { isSuccess = true, actionOnModel = "Created" }) ;
         }
 
+
         // Get: Actors/Details/1
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var actor = await _actorsService.GetByIdAsync(id);
